@@ -1,28 +1,54 @@
-import { useState } from "react";
-import styles from "../styles/Home.module.css";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
-import { auth } from "../firebase-config";
-import Login from "./components/login";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-export default function Home() {
-  const [newAccount, setNewAccount] = useState(true); // 새로운 유저인지 확인(초기값: true)
-  const [isLogin, setIsLogin] = useState(false);
+import Login from "../components/login";
+import Layout from "../components/layout";
+import Main from "./main";
 
-  const toggleAccount = () => setNewAccount((prev) => !prev);
+export default function Home() {
+  const [isLogin, setIsLogin] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const selectAllIndexDB = () => {
+    let request = window.indexedDB.open("firebaseLocalStorageDb", 1);
+
+    request.onerror = function (event) {
+      console.log("실패");
+    };
+    request.onsuccess = function (event) {
+      let db = event.target.result;
+      let transaction = db.transaction(["firebaseLocalStorage"]);
+      let objectStore = transaction.objectStore("firebaseLocalStorage");
+      let request = objectStore.getAll();
+      request.onsuccess = () => {
+        const res = request.result;
+        if (res.length === 0) {
+          // console.log("빈배열입니다.");
+          setIsLogin(false);
+        } else {
+          // console.log(res[0].fbase_key);
+          setIsLogin(true);
+        }
+        setIsLoading(true);
+      };
+    };
+  };
+
+  useEffect(() => {
+    selectAllIndexDB();
+  }, []);
+
   return (
-    <div className={styles.container}>
-      <Login setIsLogin={setIsLogin} />
-      <Link href={"/components/join"} legacyBehavior>
-        <a>회원가입</a>
-      </Link>
-      <br />
-      <span onClick={toggleAccount}>
-        {newAccount ? "Login" : "Create Account"}
-      </span>
-      <div>{isLogin ? "로그인상태입니다." : "로그인상태가 아닙니다."}</div>
-    </div>
+    <Layout isLogin={isLogin}>
+      {isLoading ? (
+        <div>
+          {isLogin ? <Main /> : <Login setIsLogin={setIsLogin} />}
+          <Link href={"/components/join"} legacyBehavior>
+            <a>회원가입</a>
+          </Link>
+        </div>
+      ) : (
+        <div>로딩중입니다.</div>
+      )}
+    </Layout>
   );
 }

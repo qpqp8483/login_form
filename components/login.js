@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { auth } from "../../firebase-config";
+import { useRouter } from "next/router";
+import { auth } from "../firebase-config";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 const Login = ({ setIsLogin }) => {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -13,12 +15,12 @@ const Login = ({ setIsLogin }) => {
       // login
       data = await signInWithEmailAndPassword(auth, email, password);
       setIsLogin(true);
-      console.log(data);
+      sessionStorage.setItem("loginValue", auth.lastNotifiedUid);
+      //router.push("/main");
     } catch (error) {
       alert("아이디 혹은 비밀번호가 일치하지 않습니다.");
       setEmail("");
       setPassword("");
-      console.log(error);
     }
   };
 

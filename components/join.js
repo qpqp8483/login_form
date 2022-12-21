@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { auth } from "../../firebase-config";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase-config";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useRouter } from "next/router";
 
-const Join = ({ setIsLogin }) => {
+const Join = () => {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -10,10 +12,10 @@ const Join = ({ setIsLogin }) => {
     e.preventDefault();
     try {
       let data;
-      // login
-      data = await signInWithEmailAndPassword(auth, email, password);
-      setIsLogin(true);
+      // join
+      data = await createUserWithEmailAndPassword(auth, email, password);
       console.log(data);
+      router.push("/");
     } catch (error) {
       alert("아이디 혹은 비밀번호가 일치하지 않습니다.");
       setEmail("");
