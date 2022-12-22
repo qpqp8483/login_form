@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 import Header from "./header";
+import styled from "styled-components";
 
-const Layout = ({ children, isLogin }) => {
+const WrapBox = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+const Layout = ({ children, isLogin, setIsLogin }) => {
   return (
-    <div>
-      <Header isLogin={isLogin} />
+    <WrapBox>
+      <Header isLogin={isLogin} setIsLogin={setIsLogin} />
       {children}
-    </div>
+    </WrapBox>
   );
 };
 

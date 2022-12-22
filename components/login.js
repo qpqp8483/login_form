@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { auth } from "../firebase-config";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import Button from "./button";
+import Input from "./input";
 
 const Login = ({ setIsLogin }) => {
   const router = useRouter();
@@ -38,23 +40,23 @@ const Login = ({ setIsLogin }) => {
   return (
     <div>
       <form onSubmit={onSubmit}>
-        <input
-          name="email"
-          type="email"
-          placeholder="Email"
+        <Input
+          name={"email"}
+          type={"email"}
+          placeholder={"Email"}
           required
           value={email}
           onChange={onChange}
         />
-        <input
-          name="password"
-          type="password"
-          placeholder="password"
+        <Input
+          name={"password"}
+          type={"password"}
+          placeholder={"password"}
           required
           value={password}
           onChange={onChange}
         />
-        <input type="submit" value="Login" />
+        <Button text={"로그인"} />
       </form>
     </div>
   );

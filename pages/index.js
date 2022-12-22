@@ -3,6 +3,16 @@ import Link from "next/link";
 import Login from "../components/login";
 import Layout from "../components/layout";
 import Main from "./main";
+import styled from "styled-components";
+
+const LoginBox = styled.div`
+  margin: auto;
+  padding: 15px;
+  width: 500px;
+  min-height: 280px;
+  border: 1px solid #333;
+  border-radius: 5px;
+`;
 
 export default function Home() {
   const [isLogin, setIsLogin] = useState(false);
@@ -22,10 +32,8 @@ export default function Home() {
       request.onsuccess = () => {
         const res = request.result;
         if (res.length === 0) {
-          // console.log("빈배열입니다.");
           setIsLogin(false);
         } else {
-          // console.log(res[0].fbase_key);
           setIsLogin(true);
         }
         setIsLoading(true);
@@ -38,14 +46,20 @@ export default function Home() {
   }, []);
 
   return (
-    <Layout isLogin={isLogin}>
+    <Layout isLogin={isLogin} setIsLogin={setIsLogin}>
       {isLoading ? (
-        <div>
-          {isLogin ? <Main /> : <Login setIsLogin={setIsLogin} />}
-          <Link href={"/components/join"} legacyBehavior>
-            <a>회원가입</a>
-          </Link>
-        </div>
+        <LoginBox>
+          {isLogin ? (
+            <Main />
+          ) : (
+            <div>
+              <Login setIsLogin={setIsLogin} />
+              <Link href={"/components/join"} legacyBehavior>
+                <a>회원가입</a>
+              </Link>
+            </div>
+          )}
+        </LoginBox>
       ) : (
         <div>로딩중입니다.</div>
       )}
