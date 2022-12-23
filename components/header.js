@@ -18,7 +18,7 @@ const Header = ({ isLogin, setIsLogin }) => {
     <HeaderBox>
       <div>{isLogin ? "로그인상태입니다." : "로그인상태가 아닙니다."}</div>
       {isLogin ? (
-        <Button onClick={logout} text={"로그아웃"} type={"negative"} />
+        <Button onClick={logout} text={"로그아웃"} type1={"negative"} />
       ) : (
         ""
       )}

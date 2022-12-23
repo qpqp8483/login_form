@@ -10,17 +10,24 @@ const Btn = styled.button`
   border-radius: 2px;
 `;
 
-const Button = ({ text, type, onClick }) => {
-  const btnType = ["positive", "negative"].includes(type) ? type : "default";
+const Button = ({ text, type1, type2, onClick }) => {
+  const btnType = ["positive_min", "negative_min"].includes(type1)
+    ? type1
+    : "default_min";
+  const btnType2 = ["positive_full", "negative_full"].includes(type2)
+    ? type2
+    : "default_full";
+
   return (
-    <Btn onClick={onClick} className={btnType}>
+    <Btn onClick={onClick} className={type1 != null ? btnType : btnType2}>
       {text}
     </Btn>
   );
 };
 
 Button.defaultProps = {
-  type: "default",
+  type1: "default_min",
+  type2: "default_full",
 };
 
 export default Button;
